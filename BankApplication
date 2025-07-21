@@ -1,0 +1,206 @@
+package Mypackage;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Scanner;
+class ATM{
+	private String name="SBI";
+	private String branch="Tiruppur";
+	public String getName() {
+		return name;
+	}
+	public String getBranch() {
+		return branch;
+	}
+}
+
+class Account extends ATM{
+	private long accountNumber;
+	private String accountType;
+	private double accountBalance;
+	public Account(long accountNumber,String accountType,double accountBalance) {
+		this.accountNumber=accountNumber;
+		this.accountType=accountType;
+		this.accountBalance=accountBalance;
+	}
+	public void setAccountBalance(double accountBalance) {
+		this.accountBalance=accountBalance;
+	}
+	public long getAccountNumber() {
+		return accountNumber;
+	}
+	public String getAccountType() {
+		return accountType;
+	}
+	public double getAccountBalance() {
+		return accountBalance;
+	}
+}
+
+class User extends Account{
+	private String userName;
+	private long phone;
+	private long aadhar;
+	private String password;
+	public User(String userName,long phone,long aadhar,String accountType,long accountNumber,String password,double accountBalance) {
+		super(accountNumber,accountType,accountBalance);
+		this.userName=userName;
+		this.phone=phone;
+		this.aadhar=aadhar;
+		this.password=password;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public long getPhone() {
+		return phone;
+	}
+	public long getAadhar() {
+		return aadhar;
+	}
+	public String getPassword() {
+		return password;
+	}
+}
+
+public class question2 {
+
+	public static void main(String[] args) {
+		LinkedHashSet<User> data=new LinkedHashSet<User>();
+		long accountNumber=100;
+		Scanner sc=new Scanner(System.in);
+		while(true) {
+			System.out.println("1. Create Account");
+			System.out.println("2. Delete Account");
+			System.out.println("3. Deposit");
+			System.out.println("4. Withdraw");
+			System.out.println("5. Balance Check");
+			System.out.println("6. Exit");
+			System.out.println("Enter your choice:");
+			int num=sc.nextInt();
+			switch(num) {
+			case 1:
+				createUser(data,accountNumber++);
+				break;
+			case 2:
+				deleteUser(data);
+				break;
+			case 3:
+				deposit(data);
+				break;
+			case 4:
+				withdraw(data);
+				break;
+			case 5:
+				balanceCheck(data);
+				break;
+			case 6:
+				System.exit(0);
+			default:
+				System.out.println("Incorrect Choice, Enter number 1-6");
+				break;
+			}
+		}
+	}
+	public static void createUser(LinkedHashSet<User> data,long accountNumber) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter your Name:");
+		String userName=sc.nextLine();
+		System.out.println("Enter your PhoneNumber:");
+		long phone=sc.nextLong();
+		System.out.println("Enter your AadharNumber:");
+		long aadhar=sc.nextLong();
+		System.out.println("Enter AccountType(1. Savings/2. current):");
+		int type=sc.nextInt();
+		String accountType=(type==1)?"savings":"current";
+		System.out.println("Enter your new Password:");
+		String password=sc.next();
+		System.out.println("Like to add Money(0. Yes/1. No):");
+		int money=sc.nextInt();
+		double balance=0.0;
+		if(money==0) {
+			System.out.println("Enter amount:");
+			balance=sc.nextDouble();
+		}
+		User obj=new User(userName,phone,aadhar,accountType,accountNumber,password,balance);
+		data.add(obj);
+		System.out.println("Successfully created new account in our Bank");
+		System.out.println("Your account Number: "+obj.getAccountNumber());
+	}
+	public static void deleteUser(LinkedHashSet<User> data) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter AccountNumber:");
+		long accountnum=sc.nextLong();
+		System.out.println("Enter Password:");
+		String pass=sc.next();
+		boolean flag=false;
+		Iterator<User> iterator=data.iterator();
+		while(iterator.hasNext()) {
+			User user=iterator.next();
+			if(user.getAccountNumber()==accountnum && user.getPassword().equals(pass)) {
+				flag=true;
+				System.out.println("Account deleted Successfully...");
+				iterator.remove();
+			}
+		}
+		if(!flag) {
+			System.out.println("Sorry! AccountNumber or Passoword is Incorrect");
+		}
+	}
+	public static void deposit(LinkedHashSet<User> data) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter AccountNumber:");
+		long accountnum=sc.nextLong();
+		System.out.println("Enter Password:");
+		String pass=sc.next();
+		boolean flag=false;
+		for(User user:data) {
+			if(user.getAccountNumber()==accountnum && user.getPassword().equals(pass)) {
+				flag=true;
+				System.out.println("Enter Amount to Deposit:");
+				double amount=sc.nextDouble();
+				user.setAccountBalance(user.getAccountBalance()+amount);
+				System.out.println("Amount deposited Successfully...");
+			}
+		}
+		if(!flag) {
+			System.out.println("Sorry! AccountNumber or Passoword is Incorrect");
+		}
+	}
+	public static void withdraw(LinkedHashSet<User> data) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter AccountNumber:");
+		long accountnum=sc.nextLong();
+		System.out.println("Enter Password:");
+		String pass=sc.next();
+		boolean flag=false;
+		for(User user:data) {
+			if(user.getAccountNumber()==accountnum && user.getPassword().equals(pass)) {
+				flag=true;
+				System.out.println("Enter Amount to Withdraw:");
+				double amount=sc.nextDouble();
+				user.setAccountBalance(user.getAccountBalance()-amount);
+				System.out.println("Amount withdrawn Successfully...");
+			}
+		}
+		if(!flag) {
+			System.out.println("Sorry! AccountNumber or Passoword is Incorrect");
+		}
+	}
+	public static void balanceCheck(LinkedHashSet<User> data) {
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter AccountNumber:");
+		long accountnum=sc.nextLong();
+		System.out.println("Enter Password:");
+		String pass=sc.next();
+		boolean flag=false;
+		for(User user:data) {
+			if(user.getAccountNumber()==accountnum && user.getPassword().equals(pass)) {
+				flag=true;
+				System.out.println("Account Balance: "+user.getAccountBalance());
+			}
+		}
+		if(!flag) {
+			System.out.println("Sorry! AccountNumber or Passoword is Incorrect");
+		}
+	}
+}
