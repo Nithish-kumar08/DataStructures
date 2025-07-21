@@ -1,0 +1,175 @@
+package Mypackage;
+import java.util.Scanner;
+class Node{
+	int data;
+	Node next;
+	public Node(int data) {
+		this.data=data;
+		this.next=null;
+	}
+}
+public class question1 {
+
+	public static void main(String[] args) {
+		Node head=null;
+		while(true) {
+			Scanner sc=new Scanner(System.in);
+			System.out.println("1. create Node");
+			System.out.println("2. Delete Node");
+			System.out.println("3. Insert at Initial");
+			System.out.println("4. Insert at end");
+			System.out.println("5. Insert at middle");
+			System.out.println("6. Display List");
+			System.out.println("7. Exit");
+			System.out.println("Enter your choice:");
+			int num=sc.nextInt();
+			int data=-1;
+			switch(num) {
+			case 1:
+				System.out.println("Enter the number to create List:");
+				data=sc.nextInt();
+				head=create(data,head,sc);
+				break;
+			case 2:
+				System.out.println("Enter the data to Delete:");
+				data=sc.nextInt();
+				head=delete(data,head);
+				break;
+			case 3:
+				System.out.println("Enter the data to insert First:");
+				data=sc.nextInt();
+				head=insertInitial(data,head);
+				break;
+			case 4:
+				System.out.println("Enter the data to insert at End:");
+				data=sc.nextInt();
+				head=insertEnd(data,head);
+				break;
+			case 5:
+				System.out.println("Enter the data to insert at Middle:");
+				data=sc.nextInt();
+				System.out.println("Enter after which element need to Insert:");
+				int n=sc.nextInt();
+				head=insertMiddle(data,n,head,sc);
+				break;
+			case 6:
+				Display(head);
+				 break;
+			case 7:
+				System.out.println("Exited!!");
+				return;
+			default:
+				System.out.println("Incorrect choice, Enter number 1-7");
+				break;
+			}
+		}
+	}
+	public static Node create(int data,Node head,Scanner sc) {
+		int n=0;
+		while(n!=-1) {
+			if(head==null) {
+				head=new Node(data);
+			}
+			else {
+				Node current=head;
+				while(current.next!=null) {
+					current=current.next;
+				}
+				current.next=new Node(data);
+			}
+			System.out.println("Enter -1 to End || 1 to continue:");
+			n=sc.nextInt();
+			if(n==1) {
+				System.out.println("Enter the data:");
+				data=sc.nextInt();
+			}
+		}
+		return head;
+	}
+	public static Node delete(int data,Node head) {
+		if(head==null) {
+			System.out.println("List is Empty!!");
+			return head;
+		}
+		if(head.data==data) {
+			System.out.println("Deleted Successfully...");
+			return head.next;
+		}
+		else {
+			Node current=head;
+			Node preCurrent=head;
+			while(current!=null) {
+				if(current.data==data) {
+					preCurrent.next=current.next;
+					System.out.println("Deleted Successfully...");
+					return head;
+				}
+				preCurrent=current;
+				current=current.next;
+			}
+			System.out.println("Data Not Found!!");
+		}
+		return head;
+	}
+	public static Node insertInitial(int data,Node head) {
+		if(head==null) {
+			head=new Node(data);
+			System.out.println("successfully inserted at First...");
+			return head;
+		}
+		Node newnode=new Node(data);
+		newnode.next=head;
+		head=newnode;
+		System.out.println("successfully inserted at First...");
+		return head;
+	}
+	public static Node insertEnd(int data,Node head) {
+		if(head==null) {
+			head=new Node(data);
+			System.out.println("successfully inserted at End...");
+			return head;
+		}
+		Node current=head;
+		while(current.next!=null) {
+			current=current.next;
+		}
+		current.next=new Node(data);
+		System.out.println("successfully inserted at End...");
+		return head;
+	}
+	public static Node insertMiddle(int data,int n, Node head,Scanner sc) {
+		if(head==null) {
+			System.out.println("List is Empty!!");
+			System.out.println("Shall i add this data to List at First(0-No || 1-Yes)");
+			head=(sc.nextInt()==1)?insertInitial(data,head):null;
+			return head;
+		}
+		Node current=head;
+		while(current!=null) {
+			if(current.data==n) {
+				Node temp=current.next;
+				Node newnode=new Node(data);
+				current.next=newnode;
+				newnode.next=temp;
+				System.out.println("successfully inserted at middle...");
+				return head;
+			}
+			current=current.next;
+		}
+		System.out.println("Element Not Found!!");
+		return head;
+	}
+	public static void Display(Node head) {
+		if(head==null) {
+			System.out.println("List is Empty!!");
+			return;
+		}
+		System.out.println("The values in the list are:");
+		Node current=head;
+		while(current!=null) {
+			System.out.print(current.data+" ");
+			current=current.next;
+		}
+		System.out.println();
+	}
+}
