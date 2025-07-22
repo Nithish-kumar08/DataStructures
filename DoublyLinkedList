@@ -1,0 +1,186 @@
+package Mypackage;
+import java.util.Scanner;
+class dNode{
+	int data;
+	dNode prev;
+	dNode next;
+	dNode(int data){
+		this.data=data;
+	}
+}
+public class DoublyLinkedList {
+
+	public static void main(String[] args) {
+		dNode head=null;
+		Scanner sc=new Scanner(System.in);
+		while(true) {
+			System.out.println("1. create Node");
+			System.out.println("2. Delete Node");
+			System.out.println("3. Insert at Initial");
+			System.out.println("4. Insert at end");
+			System.out.println("5. Insert at middle");
+			System.out.println("6. Display List");
+			System.out.println("7. Exit");
+			System.out.println("Enter your choice:");
+			int num=sc.nextInt();
+			int data=-1;
+			switch(num) {
+			case 1:
+				System.out.println("Enter data to create List: ");
+				data=sc.nextInt();
+				head=createList(data,head,sc);
+				break;
+			case 2:
+				System.out.println("Enter the data to delete the Node: ");
+				data=sc.nextInt();
+				head=deleteNode(data,head);
+				break;
+			case 3:
+				System.out.println("Enter the data to insert at First: ");
+				data=sc.nextInt();
+				head=insertInitial(data,head);
+				break;
+			case 4:
+				System.out.println("Enter the data to insert at End: ");
+				data = sc.nextInt();
+				head=insertEnd(data,head);
+				break;
+			case 5:
+				System.out.println("Enter the data to insert at Middle: ");
+				data=sc.nextInt();
+				System.out.println("Enter after which element to Add: ");
+				int n=sc.nextInt();
+				head=insertMiddle(data,n,head,sc);
+				break;
+			case 6:
+				display(head);
+				break;
+			case 7:
+				System.out.println("Exited!!");
+				return;
+			default:
+				System.out.println("Incorrect choice, Enter number 1-7: ");
+				break;
+			}
+		}
+	}
+	public static dNode createList(int data,dNode head,Scanner sc) {
+		while(true) {
+			if(head==null) {
+				head=new dNode(data);
+			}
+			else {
+				dNode current=head;
+				while(current.next!=null) {
+					current=current.next;
+				}
+				dNode newNode=new dNode(data);
+				current.next=newNode;
+				newNode.prev=current;
+			}
+			System.out.println("Enter -1 to End || Enter (except -1) to continue: ");
+			if((sc.nextInt())==-1){
+				break;
+			}
+			System.out.println("Enter data to add in List: ");
+			data=sc.nextInt();
+		}
+		return head;
+	}
+	public static dNode deleteNode(int data,dNode head) {
+		if(head==null) {
+			System.out.println("List is Empty!!");
+			return head;
+		}
+		if(head.data==data) {
+			if(head.next!=null) {
+				head.next.prev=null;
+			}
+			head=head.next;
+			System.out.println("successfully deleted the Node...");
+			return head;
+		}
+		dNode current=head;
+		while(current!=null) {
+			if(current.data==data) {
+				System.out.println("successfully deleted the Node...");
+				if(current.next!=null) {
+					current.prev.next=current.next;
+					current.next.prev=current.prev;
+					return head;
+				}
+				current.prev.next=current.next;
+				return head;
+			}
+			current=current.next;
+		}
+		System.out.println("Data Not Found!!");
+		return head;
+	}
+	public static dNode insertInitial(int data,dNode head) {
+		System.out.println("successfully added the Node at First...");
+		if(head==null) {
+			head=new dNode(data);
+			return head;
+		}
+		dNode newNode = new dNode(data);
+		head.prev=newNode;
+		newNode.next=head;
+		head=newNode;
+		return head;
+	}
+	public static dNode insertEnd(int data, dNode head) {
+		dNode newNode=new dNode(data);
+		if(head==null) {
+			System.out.println("List is Empty, But successfully added the Node at End...");
+			head=newNode;
+			return head;
+		}
+		System.out.println("successfully added the Node at End...");
+		dNode current=head;
+		while(current.next!=null) {
+			current=current.next;
+		}
+		current.next=newNode;
+		newNode.prev=current;
+		return head;
+	}
+	public static dNode insertMiddle(int data,int n,dNode head,Scanner sc) {
+		if(head==null) {
+			System.out.println("List is empty!!");
+			System.out.println("Like to add the data at Initial(0-No || 1 - yes): ");
+			head=(sc.nextInt()==1)?insertInitial(data,head):null;
+			return head;
+		}
+		dNode newNode = new dNode(data);
+		dNode current = head;
+		while(current!=null) {
+			if(current.data==n) {
+				System.out.println("successfully added the node at Middle...");
+				if(current.next!=null) {
+					newNode.next=current.next;
+					current.next.prev=newNode;
+				}
+				newNode.prev=current;
+				current.next=newNode;
+				return head;
+			}
+			current=current.next;
+		}
+		System.out.println("Element Not Found!!");
+		return head;
+	}
+	public static void display(dNode head) {
+		if(head==null) {
+			System.out.println("List is Empty!!");
+			return;
+		}
+		System.out.println("Values in the List are:");
+		dNode current = head;
+		while(current!=null) {
+			System.out.print(current.data+" ");
+			current=current.next;
+		}
+		System.out.println();
+	}
+}
