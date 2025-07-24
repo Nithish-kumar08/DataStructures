@@ -1,0 +1,194 @@
+package Mypackage;
+import java.util.Scanner;
+class cNode{
+	int data;
+	cNode next;
+	public cNode(int data) {
+		this.data=data;
+		this.next=null;
+	}
+}
+public class CircularLinkedList {
+
+	public static void main(String[] args) {
+		cNode head=null;
+		Scanner sc=new Scanner(System.in);
+		while(true) {
+			System.out.println("-----------------------");
+			System.out.println("1. create Node");
+			System.out.println("2. Delete Node");
+			System.out.println("3. Insert at Initial");
+			System.out.println("4. Insert at end");
+			System.out.println("5. Insert at middle");
+			System.out.println("6. Display List");
+			System.out.println("7. Exit");
+			System.out.println("Enter your choice:");
+			System.out.println("-----------------------");
+			int num=sc.nextInt();
+			int data=-1;
+			switch(num) {
+			case 1:
+				head=createList(head,sc);
+				break;
+			case 2:
+				head=deleteNode(head,sc);
+				break;
+			case 3:
+				System.out.println("Enter the data to insert at First Node: ");
+				data=sc.nextInt();
+				head=insertInitial(data,head);
+				break;
+			case 4:
+				System.out.println("Enter the data to insert at End: ");
+				data=sc.nextInt();
+				head=insertEnd(data,head);
+				break;
+			case 5:
+				head=insertMiddle(head,sc);
+				break;
+			case 6:
+				displayList(head);
+				break;
+			case 7:
+				System.out.println("Exited!!");
+				return;
+			default:
+				System.out.println("Incorrect choice, Enter 1-7");
+			}
+		}
+	}
+	public static cNode createList(cNode head,Scanner sc) {
+		if(head!=null) {
+			System.out.println("List is already Existed...");
+			return head;
+		}
+		System.out.println("Enter the data to create List: ");
+		int data=sc.nextInt();
+		head=new cNode(data);
+		cNode current=head;
+		while(true) {
+			System.out.println("Would you like to add more data in this List (Enter negative(-ve) number to No || Enter positive(+ve) number to yes): ");
+			if(sc.nextInt()<0) {
+				break;
+			}
+			System.out.println("Enter the data to add in the List: ");
+			data=sc.nextInt();
+			cNode newNode=new cNode(data);
+			current.next=newNode;
+			current=newNode;
+		}
+		current.next=head;
+		return head;
+	}
+	public static cNode deleteNode(cNode head,Scanner sc) {
+		if(head==null) {
+			System.out.println("List is Empty!!");
+			return head;
+		}
+		System.out.println("Enter the data to delete the node from List: ");
+		int data=sc.nextInt();
+		cNode current=head;
+		if(head.data==data) {
+			System.out.println("successfully deleted the node...");
+			if(current.next!=head) {
+				do {
+					current=current.next;
+				}while(current.next!=head);
+				current.next=head.next;
+				head=head.next;
+				return head;
+			}
+			return null;
+		}
+		cNode prev=head;
+		do {
+			if(current.data==data) {
+				System.out.println("successfully deleted the node...");
+				prev.next=current.next;
+				return head;
+			}
+			prev=current;
+			current=current.next;
+		}while(current!=head);
+		System.out.println("Data Not Found!!");
+		return head;
+	}
+	public static cNode insertInitial(int data,cNode head) {
+		System.out.println("successfully inserted node at First...");
+		cNode newNode=new cNode(data);
+		if(head==null) {
+			newNode.next=newNode;
+			return newNode;
+		}
+		newNode.next=head;
+		if(head.next==head) {
+			head.next=newNode;
+			head=newNode;
+			return head;
+		}
+		cNode current=head;
+		do {
+			current=current.next;
+		}while(current.next!=head);
+		head=newNode;
+		current.next=head;
+		return head;
+	}
+	public static cNode insertEnd(int data,cNode head) {
+		System.out.println("successfully inserted node at End...");
+		cNode newNode=new cNode(data);
+		if(head==null) {
+			newNode.next=newNode;
+			return newNode;
+		}
+		cNode current=head;
+		do {
+			current=current.next;
+		}while(current.next!=head);
+		current.next=newNode;
+		newNode.next=head;
+		return head;
+	}
+	public static cNode insertMiddle(cNode head,Scanner sc) {
+		if(head==null) {
+			System.out.println("List is Empty!!");
+			System.out.println("Would you like to insert at First node (No-negative number(-ve) || Yes-positive number(+ve)): ");
+			if(sc.nextInt()>0) {
+				System.out.println("Enter the data to insert: ");
+				int data=sc.nextInt();
+				return insertInitial(data,head);
+			}
+			return null;
+		}
+		System.out.println("Enter the data to insert at Middle: ");
+		int data=sc.nextInt();
+		System.out.println("Enter after which element to insert the node: ");
+		int n=sc.nextInt();
+		cNode newNode=new cNode(data);
+		cNode current=head;
+		do {
+			if(current.data==n) {
+				System.out.println("successfully inserted node at after first occurrence of "+n);
+				newNode.next=current.next;
+				current.next=newNode;
+				return head;
+			}
+			current=current.next;
+		}while(current!=head);
+		System.out.println("Element Not Found!!");
+		return head;
+	}
+	public static void displayList(cNode head) {
+		if(head==null) {
+			System.out.println("List is Empty!!");
+			return;
+		}
+		System.out.println("The values in the list are: ");
+		cNode current=head;
+		do {
+			System.out.print(current.data+" ");
+			current=current.next;
+		}while(current!=head);
+		System.out.println();
+	}
+}
